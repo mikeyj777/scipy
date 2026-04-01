@@ -1,0 +1,228 @@
+{\rtf1\ansi\deff0\nouicompat{\fonttbl{\f0\fnil\fcharset0 Calibri;}{\f1\fnil Calibri;}}
+{\*\generator Riched20 10.0.19041}\viewkind4\uc1 
+\pard\sa200\sl276\slmult1\f0\fs22\lang9 # SciPy Mastery Curriculum \f1\emdash  Foundational Specification\par
+\par
+## Purpose\par
+\par
+This document defines the structure, principles, and pedagogy for a self-directed mastery curriculum covering the SciPy scientific computing library. The goal is not encyclopedic coverage of the API, but deep fluency \emdash  the ability to recognize which mathematical idea a problem belongs to, select the right tools, implement a solution, and critically interpret the result. Learning proceeds through doing, failing, and iterating on problems. Reading documentation and tutorials is supplementary, not primary.\par
+\par
+---\par
+\par
+## The Seven Principles\par
+\par
+The SciPy library is organized into functional modules, but mastery is not achieved module by module. Instead, the curriculum is organized around seven mathematical principles, each of which draws from multiple scipy modules. This cross-module structure is intentional: real problems don't announce which module they need, and expert fluency means recognizing the underlying principle first.\par
+\par
+The `scipy.io` module, parallel execution support, and thread safety in SciPy are treated as **cross-cutting infrastructure** rather than standalone principles. They are woven into problem setups at the advanced and expert tiers, where loading real data, managing memory, and reasoning about thread safety are conditions of the problem rather than its subject.\par
+\par
+---\par
+\par
+### Principle 1 \emdash  Linear Algebra & Matrix Structure\par
+\par
+**Modules:** `scipy.linalg` (primary), `scipy.sparse` (supporting), `scipy.sparse.linalg` with ARPACK (supporting)\par
+\par
+**Core idea:** Matrices encode transformations, relationships, and structure. Decomposing them reveals what a system is actually doing \emdash  its rank, its sensitivity, its dominant directions.\par
+\par
+**Topics covered:**\par
+- Solving linear systems: `solve`, `lu_factor`, `lu_solve`\par
+- Matrix decompositions: LU, QR, SVD, Cholesky, Schur\par
+- Eigenvalue problems: `eig`, `eigh`, `eigvals`\par
+- Matrix functions: `expm`, `logm`, `sqrtm`\par
+- Norms, conditioning, and numerical stability\par
+- Sparse matrix formats: CSR, CSC, COO, LIL, DOK \emdash  construction, conversion, and when each is appropriate\par
+- Large-scale eigenvalue problems with ARPACK: `eigsh`, `eigs`, shift-invert mode\par
+- Memory layout and performance considerations for large matrices\par
+\par
+---\par
+\par
+### Principle 2 \emdash  Numerical Quadrature\par
+\par
+**Modules:** `scipy.integrate` (quad family, primary), `scipy.special` (supporting), `scipy.interpolate` (supporting)\par
+\par
+**Core idea:** Most integrals don't have closed forms. Numerical quadrature is the art of computing them anyway \emdash  choosing the right scheme for the function's behavior, domain, and required precision.\par
+\par
+**Topics covered:**\par
+- Single integrals: `quad`, `fixed_quad`, `romberg`\par
+- Multiple integrals: `dblquad`, `tplquad`, `nquad`\par
+- Handling singularities, infinite bounds, and oscillatory integrands\par
+- Error estimation and convergence control\par
+- Connection to special functions \emdash  many are defined as named integrals (`gamma`, `beta`, `erf`, Bessel functions)\par
+- Spline-based quadrature via interpolation\par
+- Numerical normalization of probability densities\par
+\par
+---\par
+\par
+### Principle 3 \emdash  Statistics & Probability\par
+\par
+**Modules:** `scipy.stats` (primary), `scipy.special` (supporting), `scipy.optimize` (supporting), `scipy.integrate` (supporting), `scipy.interpolate` (supporting)\par
+\par
+**Core idea:** Data carries uncertainty. Statistical inference is the process of reasoning about populations, parameters, and hypotheses from finite samples \emdash  and the numerical machinery underneath distributions and tests is what makes it tractable.\par
+\par
+**Topics covered:**\par
+- Continuous distributions: `norm`, `t`, `chi2`, `f`, `beta`, `expon`, `lognorm`, and others\par
+- Discrete distributions: `binom`, `poisson`, `geom`, `hypergeom`\par
+- Distribution methods: `pdf`, `cdf`, `ppf`, `rvs`, `fit`, `stats`\par
+- Descriptive statistics and summary measures\par
+- Hypothesis tests: `ttest_ind`, `ttest_rel`, `mannwhitneyu`, `ks_2samp`, `chi2_contingency`, `shapiro`\par
+- Confidence intervals and bootstrap methods\par
+- Kernel density estimation\par
+- Maximum likelihood estimation via `optimize`\par
+- Numerical integration for normalizing constants and marginal likelihoods\par
+- The anatomy of special functions inside distribution PDFs\par
+\par
+---\par
+\par
+### Principle 4 \emdash  Optimization & Inverse Problems\par
+\par
+**Modules:** `scipy.optimize` (primary), `scipy.linalg` (supporting), `scipy.sparse` (supporting), `scipy.stats` (supporting)\par
+\par
+**Core idea:** Given observations or constraints, recover the thing that produced them. Root finding, minimization, and curve fitting are all facets of a single idea: define what "wrong" looks like numerically, then find the parameters that minimize it.\par
+\par
+**Topics covered:**\par
+- Root finding: `brentq`, `brentq`, `fsolve`, `root`\par
+- Unconstrained minimization: `minimize` with Nelder-Mead, BFGS, L-BFGS-B\par
+- Constrained minimization: `minimize` with SLSQP, trust-constr; bounds and constraints\par
+- Curve fitting: `curve_fit`, `least_squares`\par
+- Linear programming: `linprog`\par
+- Global optimization: `differential_evolution`, `basinhopping`, `shgo`\par
+- Interpreting `OptimizeResult`: convergence flags, Jacobian, Hessian inverse\par
+- Ill-posed problems and regularization via `linalg`\par
+- Exploiting sparse Jacobian structure in large-scale problems\par
+- Statistical framing: likelihood as objective function\par
+\par
+---\par
+\par
+### Principle 5 \emdash  Dynamical Systems\par
+\par
+**Modules:** `scipy.integrate` (ODE family, primary), `scipy.linalg` (supporting), `scipy.signal` (supporting), `scipy.fft` (supporting)\par
+\par
+**Core idea:** Many physical systems evolve continuously in time according to differential equations. Numerical simulation, stability analysis, and the relationship between a system's structure and its behavior are unified by this principle.\par
+\par
+**Topics covered:**\par
+- Initial value problems: `solve_ivp` with RK45, RK23, DOP853, Radau, BDF, LSODA\par
+- `odeint` legacy interface and when to prefer it\par
+- Stiff systems: identifying stiffness, choosing implicit solvers\par
+- Event detection: zero-crossing, terminal and non-terminal events\par
+- System linearization and equilibrium analysis\par
+- Stability via eigenvalues of the Jacobian: `linalg.eig`\par
+- Transfer functions and state-space representations via `signal`\par
+- Spectral analysis of ODE solutions via `fft`\par
+\par
+---\par
+\par
+### Principle 6 \emdash  Spectral Analysis & Filtering\par
+\par
+**Modules:** `scipy.fft` (primary), `scipy.signal` (primary), `scipy.special` (supporting)\par
+\par
+**Core idea:** Every signal has a dual life in frequency space. Spectral analysis reveals the frequency content of a signal; filtering shapes it. These are not separate tools \emdash  filter design is an exercise in frequency domain thinking.\par
+\par
+**Topics covered:**\par
+- DFT fundamentals: frequency bins, Nyquist, aliasing\par
+- `fft`, `ifft`, `rfft`, `irfft`, `fft2`, `fftn`\par
+- Spectral leakage and windowing: `signal.windows` functions, analytic forms in `special`\par
+- Power spectral density: `periodogram`, `welch`\par
+- Spectrograms and short-time Fourier transforms: `stft`, `spectrogram`\par
+- Analog filter prototypes: Butterworth, Chebyshev I/II, elliptic, Bessel\par
+- Filter design: `butter`, `cheby1`, `cheby2`, `ellip`, `bessel`, `firwin`\par
+- Filter application: `lfilter`, `sosfilt`, `filtfilt` (zero-phase)\par
+- Convolution and correlation: `fftconvolve`, `correlate`\par
+- Resampling: `resample`, `resample_poly`, `decimate`\par
+- Peak finding: `find_peaks` with prominence, width, and distance constraints\par
+- Poles, zeros, and frequency response: `freqz`, `freqs`, `tf2zpk`\par
+\par
+---\par
+\par
+### Principle 7 \emdash  Geometry, Graphs & Fields\par
+\par
+**Modules:** `scipy.spatial` (primary), `scipy.ndimage` (primary), `scipy.sparse.csgraph` (primary), `scipy.interpolate` (supporting), ARPACK (supporting)\par
+\par
+**Core idea:** Data often lives in space, and spatial relationships encode structure. This principle covers point clouds, graphs derived from geometry, operations on spatial fields, and the spectral properties of graphs.\par
+\par
+**Topics covered:**\par
+- Nearest neighbor queries: `KDTree`, `cKDTree`, k-NN and radius search\par
+- Triangulation and hulls: `Delaunay`, `ConvexHull`, `Voronoi`\par
+- Distance computation: `cdist`, `pdist` with various metrics\par
+- Rotations: `Rotation` class, Euler angles, quaternions, SLERP\par
+- Graph algorithms on sparse matrices: `dijkstra`, `bellman_ford`, `floyd_warshall`\par
+- Connected components: `connected_components`\par
+- Minimum spanning tree: `minimum_spanning_tree`\par
+- Breadth-first and depth-first traversal: `breadth_first_order`, `depth_first_order`\par
+- Building graphs from geometric point clouds\par
+- `ndimage` filters: Gaussian, uniform, median, Laplace, Sobel\par
+- Morphological operations: `binary_erosion`, `binary_dilation`, `binary_opening`, `binary_closing`, `binary_fill_holes`\par
+- Measurement and labeling: `label`, `find_objects`, `center_of_mass`, `sum`\par
+- Geometric transforms on fields: `affine_transform`, `rotate`, `zoom`\par
+- Scattered data interpolation: `RBFInterpolator`, `RegularGridInterpolator`, `griddata`\par
+- Spectral graph theory: Laplacian eigenvalues via ARPACK\par
+\par
+---\par
+\par
+## Dependency Order & Learning Flow\par
+\par
+The seven principles are not independent. The following tier structure reflects both mathematical dependency and conceptual difficulty:\par
+\par
+**Tier 1 \emdash  Start here:**\par
+- Principle 1: Linear Algebra & Matrix Structure\par
+- Principle 2: Numerical Quadrature\par
+- Principle 3: Statistics & Probability *(beginner and intermediate problems only)*\par
+\par
+These are the most self-contained. For a learner with an engineering background, the concepts are largely familiar \emdash  the work is learning the SciPy idioms, not the underlying mathematics.\par
+\par
+**Tier 2 \emdash  After Tier 1 is solid:**\par
+- Principle 4: Optimization & Inverse Problems *(requires comfort with linear algebra and statistical framing)*\par
+- Principle 5: Dynamical Systems *(requires both linear algebra and quadrature intuition)*\par
+\par
+**Tier 3 \emdash  Integrative, after Tier 2:**\par
+- Principle 6: Spectral Analysis & Filtering *(synthesizes linear algebra, dynamical systems, and quadrature)*\par
+- Principle 7: Geometry, Graphs & Fields *(most heterogeneous; visit lightly in Tier 1, return seriously in Tier 3)*\par
+- Principle 3: Statistics & Probability *(advanced and expert problems)*\par
+\par
+At the expert tier, problems deliberately span multiple principles. A problem labeled under one principle at the expert level will require fluency in two or three others to complete.\par
+\par
+---\par
+\par
+## Problem Set Structure\par
+\par
+Each principle has **20 problems** organized into four tiers of five problems each:\par
+\par
+**Beginner (5 problems)**\par
+One module, one function, prescribed setup. The primary learning target is the API. Errors at this level come from misreading documentation, wrong argument order, or shape mismatches. A correct answer means getting the right number or array out. Problems provide explicit function names to use.\par
+\par
+**Intermediate (5 problems)**\par
+Two or more modules in tension. The problem setup is clear but the implementation path requires understanding what is being computed, not just how to call it. Errors come from mathematical misunderstanding or mismatched units and shapes. Problems provide the goal but not the function names.\par
+\par
+**Advanced (5 problems)**\par
+A realistic mini-problem where module selection is not given. The learner must decide which tools fit, handle edge cases (singularities, convergence failures, numerical instability, noise, sparse structure), and interpret the result critically. A correct answer is a defensible approach, not just a working script. Problems are stated as a scenario, not as instructions.\par
+\par
+**Expert (5 problems)**\par
+Ambiguous problem statement with no uniquely correct solution. Performance and numerical robustness matter. Problems intentionally cross principle boundaries \emdash  an expert dynamical systems problem may require spectral analysis to interpret the solution, or a statistics problem may require numerical integration and special functions to build the likelihood. Infrastructure concerns (data loading via `scipy.io`, thread safety, memory efficiency) appear as problem conditions. The learner is expected to justify their design choices.\par
+\par
+---\par
+\par
+## Answer Key Specification\par
+\par
+Every problem set must be accompanied by a complete answer key. The answer key follows these formatting rules without exception:\par
+\par
+1. The full problem statement is reproduced verbatim above each answer, clearly labeled with its principle, tier, and problem number.\par
+2. The answer provides working, executable Python code.\par
+3. Inline comments explain non-obvious choices \emdash  why a particular solver was selected, why a tolerance was set a certain way, what a convergence flag means.\par
+4. For advanced and expert problems, the answer includes a brief written justification (3\endash 6 sentences) above the code explaining the approach and any tradeoffs made.\par
+5. For expert problems, at least one alternative approach is noted with a sentence explaining why it was not preferred.\par
+6. The answer key is a standalone document \emdash  it should be fully interpretable without referring back to the problem set document.\par
+\par
+---\par
+\par
+## Notes on Problem Design\par
+\par
+Problems should be grounded wherever possible. Abstract "compute the eigenvalues of this matrix" problems are acceptable at the beginner tier. From intermediate onward, problems should be anchored to a physical, engineering, or data science context \emdash  even if the context is minimal. The learner should always be able to answer the question "why would someone compute this?"\par
+\par
+Beginner problems may specify the exact function to use. All other tiers should not. By the time a learner reaches intermediate, the act of choosing the right function is part of the problem.\par
+\par
+Problems should be designed to fail in interesting ways when approached naively. A good intermediate problem has a trap \emdash  a numerical instability, a shape mismatch that isn't obvious, a convergence issue that requires reading the documentation carefully. The failure is the lesson.\par
+\par
+---\par
+\par
+## Instruction to the Assistant\par
+\par
+The user will specify the principle to be studied here. You will generate the problem set and answer key both in their own new artifacts. The principle to be studied here is:\f0\par
+}
+ 
