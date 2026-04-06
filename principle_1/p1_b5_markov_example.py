@@ -18,12 +18,11 @@ Verify the stationary distribution satisfies π @ P = π
 
 '''
 import numpy as np
+from helpers import Chainlink
 
 P = np.array([[0.8, 0.2], [0.6, 0.4]])
 
-def get_probability_distribution(prob_dict, current_condition):
-  row = current_condition % 2
-  
+
   
 
 # If today is Sunny, what's the probability distribution after 1 day? After 5 days? After 20 days?

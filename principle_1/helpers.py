@@ -10,6 +10,7 @@ class Chainlink:
     self.children = []
     self.is_sunny = int(is_sunny)
     self.probability_tmrw_is_sunny = None
+    self.me = id(self)
     
   def get_P_at_t(self, t):
     return expm(t * self.Q)
