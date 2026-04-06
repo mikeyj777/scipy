@@ -2,7 +2,7 @@ import numpy as np
 from scipy.linalg import expm
 
 class Chainlink:
-  def __init__(self, is_sunny, my_probability_of_existing, P = None, Q = None, parent = None):
+  def __init__(self, is_sunny, my_probability_of_existing, current_day, P = None, Q = None, parent = None):
     self.P = P
     self.Q = Q
     self.p = my_probability_of_existing
@@ -11,6 +11,7 @@ class Chainlink:
     self.is_sunny = int(is_sunny)
     self.probability_tmrw_is_sunny = None
     self.me = id(self)
+    self.current_day = current_day
     
   def get_P_at_t(self, t):
     return expm(t * self.Q)
@@ -23,5 +24,3 @@ class Chainlink:
       P = self.P
     p_row = P[self.is_sunny]
     self.probability_tmrw_is_sunny = self.p * p_row[0]
-    
-    
