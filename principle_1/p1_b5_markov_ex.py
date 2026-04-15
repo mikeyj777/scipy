@@ -34,7 +34,9 @@ def create_chain(is_sunny, parent_chainlink:Chainlink, target_day):
   day = parent_chainlink.day
   if day == target_day:
     return
-  day += 1
+  if not is_sunny:
+    day += 1
+  is_sunny = not is_sunny
   parent_prob = parent_chainlink.my_probability_of_existing
   parent_was_sunny = parent_chainlink.is_sunny
   prob_row = P[(int(parent_was_sunny) + 1) % 2]
