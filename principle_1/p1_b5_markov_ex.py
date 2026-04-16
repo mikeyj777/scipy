@@ -19,8 +19,8 @@ Verify the stationary distribution satisfies π @ P = π
 script results:
 
 in 1 days the probability of it being sunny is 0.800.  the probability of it being cloudy is 0.200
-in 5 days the probability of it being sunny is 0.670.  the probability of it being cloudy is 0.330
-in 20 days the probability of it being sunny is 0.667.  the probability of it being cloudy is 0.333
+in 5 days the probability of it being sunny is 0.750.  the probability of it being cloudy is 0.250
+in 20 days the probability of it being sunny is 0.750.  the probability of it being cloudy is 0.250
 
 '''
 import os
@@ -38,26 +38,23 @@ def weather_prob(is_sunny, target_day, current_day = 0, my_probability = 1):
     return 0
   idx = (int(is_sunny) + 1) % 2
   P_row = P[idx]
-  p_tmrw_sunny = P_row[idx]
-  p_tmrw_cloudy = P_row[(idx + 1) % 2]
+  p_tmrw_sunny = P_row[0]
+  p_tmrw_cloudy = P_row[1]
   return weather_prob(is_sunny=True, target_day=target_day, current_day=current_day + 1, my_probability=p_tmrw_sunny*my_probability) + \
     weather_prob(is_sunny=False, target_day=target_day, current_day=current_day+1, my_probability=p_tmrw_cloudy*my_probability)
 
 
 # If today is Sunny, what's the probability distribution after 1 day? After 5 days? After 20 days?
-# num_days = [1, 5, 20]
-num_days = [30, 40, 50]
+num_days = [1, 5, 20]
+# num_days = [30, 40, 50]
 starting_weather_is_sunny = True
 sunny_prob_dict = {}
-prev_day = 0
-prev_prob = 1
+# days = 0
 for days in num_days:
-  sunny_prob_dict[days] = weather_prob(is_sunny=starting_weather_is_sunny, target_day=days, current_day=prev_day, my_probability=prev_prob)
-  prev_prob = sunny_prob_dict[days]
-  prev_day = days
-  
-
-for k, v in sunny_prob_dict.items():
+  # days += 1
+  sunny_prob_dict[days] = weather_prob(is_sunny=starting_weather_is_sunny, target_day=days)
+  k = days
+  v= sunny_prob_dict[days]
   print(f'in {k} days the probability of it being sunny is {v:.03f}.  the probability of it being cloudy is {1-v:.03f}')
 
 apple = 1
