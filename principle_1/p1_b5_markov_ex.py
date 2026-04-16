@@ -26,7 +26,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from principle_1.helpers import Chainlink
 
 P = np.array([[0.8, 0.2], [0.6, 0.4]])
-
+starting_weather_is_sunny = True
 chain = []
 
 def create_chain(is_sunny, parent_chainlink:Chainlink, target_day):
@@ -34,25 +34,21 @@ def create_chain(is_sunny, parent_chainlink:Chainlink, target_day):
   day = parent_chainlink.day
   if day == target_day:
     return
-  if not is_sunny:
-    day += 1
-  is_sunny = not is_sunny
+  shared_chainlink = parent_chainlink
   parent_prob = parent_chainlink.my_probability_of_existing
   parent_was_sunny = parent_chainlink.is_sunny
   prob_row = P[(int(parent_was_sunny) + 1) % 2]
   prob = prob_row[(int(is_sunny) + 1) % 2]
   link = Chainlink(is_sunny=is_sunny, my_probability_of_existing=prob, P=P, parent_id=parent_chainlink.id)
   chain.append(link)
-  create_chain
+  create_chain(is_sunny=is_sunny, parent_chainlink=shared_chainlink, target_day=target_day)
 
 
 # If today is Sunny, what's the probability distribution after 1 day? After 5 days? After 20 days?
 num_days = [1, 5, 20]
 
-<<<<<<< HEAD:principle_1/p1_b5_markov_ex.py
-init_row = 0
 results = {}
-is_sunny = True
+is_sunny = starting_weather_is_sunny
 prob_of_existing = 1
 for days in num_days:
   parent_link = Chainlink(is_sunny=is_sunny, my_probability_of_existing=prob_of_existing, P = P)
@@ -61,12 +57,4 @@ for days in num_days:
     for is_sunny in [True, False]:
       link = Chainlink(is_sunny=is_sunny)
 
-=======
-max_days = max(num_days)
-prob = 1
-is_sunny = True
-row = int(is_sunny + 1) % 2
-for day in range(1, max_days + 1):
-    chain_link = Chainlink(is_sunny=is_sunny, my_probability_of_existing=prob)
->>>>>>> fb9efd80d7aafd5975bfad8d462ffc5ed06966e3:principle_1/p1_b5_markov_example.py
     
