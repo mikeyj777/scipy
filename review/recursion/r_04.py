@@ -8,18 +8,24 @@ Introduces the idea of conditionally contributing to the result depending on wha
 import numpy as np
 from random import randint
 
-def count_occurrences(val, arr, tot = 0):
+def count_occurrences_way_down(val, arr, tot = 0):
   if len(arr) == 0:
     return tot
   if val == arr[-1]:
     tot += 1
-  return count_occurrences(val, arr[:-1] , tot)
-  
+  return count_occurrences_way_down(val, arr[:-1] , tot)
+
+def count_occurrences(val, arr):
+  if len(arr) == 0:
+    return 0
+  if val == arr[-1]:
+    return 1 + count_occurrences(val, arr[:-1])
+  return count_occurrences(val, arr[:-1])
 
 working = 0
 tot_count = 0
 
-for n in range(10,900):
+for n in range(10,100):
   arr = np.random.randint(1,100,n)
   val = randint(1, 100)
   unique, counts = np.unique(arr, return_counts=True)
