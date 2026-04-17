@@ -13,11 +13,7 @@ import numpy as np
 
 grid_side = 5
 
-grid = np.ones((grid_side, grid_side), dtype=np.int64)
-
-out_grid = np.empty((grid_side, grid_side))
-
-walk_dict = {}
+results = np.empty((grid_side, grid_side))
 
 # start in bottom left corner of grid. that has zero paths to get anywhere.  maybe you could consider it the one path to stay where it is
 # go to the left and up.  add one each time you get to a new cell.  memoize the stored value
@@ -26,16 +22,15 @@ walk_dict = {}
 def grid_walk(pos):
   global walk_dict
   x, y = pos
-  if f'{x} {y}' in walk_dict:
-    return walk_dict[f'{x} {y}']
-  if x >= grid_side - 1:
-    return 1
-  if y >= grid_side - 1:
-    return 1
-  ans = grid_walk([x + 1, y]) + grid_walk([x, y + 1])
-  walk_dict[f'{x} {y}'] = ans
-  out_grid[x,y] = ans
-  return grid_walk([x + 1, y]) + grid_walk([x, y + 1])
+  if not np.isnan(results[x, y]):
+    return results[x, y]
+  if x == grid_side - 1 and y == grid_side -1:
+    return 0
+  x_next = min(x + 1, grid_side-1)
+  y_next = min(y + 1, grid_side-1)
+  ans = 1 + grid_walk([x_next, y]) + grid_walk([x, y_next])
+  results[x, y] = ans
+  return ans
 
 grid_walk([0, 0])
 
