@@ -13,19 +13,24 @@ def fibonacci(n):
   if n in fib_dict:
     return fib_dict[n]
   if n <= 0:
+    fib_dict[n] = 0
     return 0
   if n == 1:
+    fib_dict[n] = 1
     return 1
-  if n-2 not in fib_dict:
-    fib_dict[n-2] = fibonacci(n-2)
-  if n-1 not in fib_dict:
-    fib_dict[n-1] = fibonacci(n-1)
-  return fib_dict[n-2] + fib_dict[n-1]
+  ans = fibonacci(n-2) + fibonacci(n-1)
+  fib_dict[n] = ans
+  return ans
 
+# 1972 is max value that can be executed directly with the above format
+# print(f'{fibonacci(1972)=}')
+
+# the loop method fills out the dict and allows calculations limited by digit display settings
+ 
 n = -1
 while True:
   n += 1
-  fib_dict[n] = fibonacci(n)
+  fibonacci(n)
   if n % 100 == 0:
     print(f'{n=} fibonacci({n})= {fib_dict[n]}')
   if n % 1000 == 0:
