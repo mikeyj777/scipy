@@ -8,29 +8,26 @@ each frame weights two recursive results by the transition probabilities before 
 and the structure is nearly identical to your weather problem — just on a number line instead of a state matrix.
 
 '''
-bankroll = 10000
-target = 20000
+bankroll = 1
+target = 3
 p = 0.3
-keep_track = []
+bankroll_prob_dict = {}
+iters = 0
 
-def betting_until_payday(bankroll, target, p):
-  global keep_track
-  keep_track.append(bankroll/target)
-  if len(keep_track) % 100 == 0:
-    print(sum(keep_track)/len(keep_track))
+def betting_until_payday(bankroll=bankroll, target=target, p=p, win = True):
+  global iters, bankroll_prob_dict
+  iters += 1
   if bankroll <= 0:
     return 0
   if bankroll >= target:
     return 1
-  win = p * betting_until_payday(bankroll, target, p)
-  lose = (1-p) * betting_until_payday(bankroll, target, p)
-  bankroll += win - lose
-  return bankroll / target
+  if bankroll in bankroll_prob_dict:
+    return bankroll_prob_dict[bankroll][win]
+  if iters == 475:
+    apple = 1
+  bankroll_prob_dict[bankroll] = {
+    True: p * betting_until_payday(bankroll=bankroll + 1, win=True),
+    False: (1-p) * betting_until_payday(bankroll=bankroll - 1, win=False)
+  }
 
-epochs = 100000
-ans = 0
-
-for i in range(epochs):
-  ans += betting_until_payday(bankroll=bankroll, target=target, p=p)
-
-print(f'probability of making target: {ans / epochs}')
+betting_until_payday()
