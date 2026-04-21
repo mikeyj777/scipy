@@ -22,12 +22,20 @@ def betting_until_payday(bankroll=bankroll, target=target, p=p, win = True):
   if bankroll >= target:
     return 1
   if bankroll in bankroll_prob_dict:
-    return bankroll_prob_dict[bankroll][win]
+    if win in bankroll_prob_dict[bankroll]:
+      return bankroll_prob_dict[bankroll][win]
   if iters == 475:
     apple = 1
-  bankroll_prob_dict[bankroll] = {
-    True: p * betting_until_payday(bankroll=bankroll + 1, win=True),
-    False: (1-p) * betting_until_payday(bankroll=bankroll - 1, win=False)
-  }
+  if bankroll in bankroll_prob_dict:
+    if True in bankroll_prob_dict[bankroll]:
+      return bankroll_prob_dict[bankroll][True]
+  if bankroll not in bankroll_prob_dict:
+    bankroll_prob_dict[bankroll] = {}
+  bankroll_prob_dict[bankroll][True] = p * betting_until_payday(bankroll=bankroll + 1, win=True)
+  
+  if bankroll in bankroll_prob_dict:
+    if False in bankroll_prob_dict[bankroll]:
+      return bankroll_prob_dict[bankroll][False]
+  bankroll_prob_dict[bankroll][False] = (1-p) * betting_until_payday(bankroll=bankroll - 1, win=False)
 
 betting_until_payday()
